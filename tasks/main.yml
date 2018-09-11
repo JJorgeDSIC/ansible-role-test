@@ -23,7 +23,7 @@
 - name: Cloning repository with TF code 
   git: 
     repo: 'https://github.com/JJorgeDSIC/DistributedTensorFlowCodeForIM.git'
-    dest: {{ clone_path }}
+    dest: '{{ clone_path }}'
     clone: yes
 
 ####################################################
@@ -48,22 +48,22 @@
 #   command: ./launch_tensorboard.sh {{ model_path }}
 #   when: launch_tensorboard
 #   args:
-#     chdir: {{ clone_path }}/{{ work_dir }}
+#     chdir: '{{ clone_path }}/{{ work_dir }}'
 
 # - name: Training (PS)
 #   command: ./launch_training_dist.sh 0 {{ data_path }} {{ model_path }} {{ train_steps }} ps {{ ps_nodes_list }} {{ master_node }} {{ worker_nodes_list }}
 #   when: node_type == "ps"
 #   args:
-#     chdir: {{ clone_path }}/{{ work_dir }}
+#     chdir: '{{ clone_path }}/{{ work_dir }}'
 
 # - name: Training (MASTER)
 #   command: ./launch_training_dist.sh 1 {{ data_path }} {{ model_path }} {{ train_steps }} master {{ ps_nodes_list }} {{ master_node }} {{ worker_nodes_list }}
 #   when: node_type == "master"
 #   args:
-#     chdir: {{ clone_path }}/{{ work_dir }}
+#     chdir: '{{ clone_path }}/{{ work_dir }}'
 
 # - name: Training (WORKER)
 #   command: ./launch_training_dist.sh 1 {{ data_path }} {{ model_path }} {{ train_steps }} worker {{ ps_nodes_list }} {{ master_node }} {{ worker_nodes_list }}
 #   when: node_type == "worker"
 #   args:
-#     chdir: {{ clone_path }}/{{ work_dir }}
+#     chdir: '{{ clone_path }}/{{ work_dir }}'

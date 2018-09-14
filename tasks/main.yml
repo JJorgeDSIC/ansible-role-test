@@ -30,7 +30,7 @@
   pip:
     name: tensorflow
     executable: pip3 
-  when: not gpu
+  when: num_gpu == 0
 
 ####################################################
 #  --------- Configuration ----------------------  #
@@ -39,7 +39,7 @@
   pip:
     name: tensorflow-gpu
     executable: pip3 
-  when: gpu
+  when: num_gpu > 0
 
 - name: Launch tensorboard
   command: ./launch_tensorboard.sh {{ model_path }}
@@ -48,19 +48,19 @@
     chdir: '{{ clone_path }}/{{ work_dir }}'
 
 - name: Training (PS)
-  command: ./launch_training_dist.sh 0 {{ data_path }} {{ model_path }} {{ train_steps }} ps {{ ps_nodes_list }} {{ master_node }} {{ worker_nodes_list }}
+  command: ./launch_training_dist.sh {{ num_gpu}} {{ data_path }} {{ model_path }} {{ train_steps }} ps {{ ps_nodes_list }} {{ master_node }} {{ worker_nodes_list }}
   when: node_type == "ps" and launch_training
   args:
     chdir: '{{ clone_path }}/{{ work_dir }}'
 
 - name: Training (MASTER)
-  command: ./launch_training_dist.sh 1 {{ data_path }} {{ model_path }} {{ train_steps }} master {{ ps_nodes_list }} {{ master_node }} {{ worker_nodes_list }}
+  command: ./launch_training_dist.sh {{ num_gpu}} {{ data_path }} {{ model_path }} {{ train_steps }} master {{ ps_nodes_list }} {{ master_node }} {{ worker_nodes_list }}
   when: node_type == "master" and launch_training
   args:
     chdir: '{{ clone_path }}/{{ work_dir }}'
 
 - name: Training (WORKER)
-  command: ./launch_training_dist.sh 1 {{ data_path }} {{ model_path }} {{ train_steps }} worker {{ ps_nodes_list }} {{ master_node }} {{ worker_nodes_list }}
+  command: ./launch_training_dist.sh {{ num_gpu}} {{ data_path }} {{ model_path }} {{ train_steps }} worker {{ ps_nodes_list }} {{ master_node }} {{ worker_nodes_list }}
   when: node_type == "worker" and launch_training
   args:
     chdir: '{{ clone_path }}/{{ work_dir }}'
